@@ -1,0 +1,7 @@
+pl "Running default Xielang script..."
+
+= $htmlT @`"Welcome to xbr v" + $versionG`
+
+mt $rs $windowG setHtml $htmlT
+
+mt $rs $windowG show
