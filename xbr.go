@@ -211,6 +211,8 @@ func getInputGUI(argsA ...string) interface{} {
 	return rs
 }
 
+var windowStyleG = webview2.HintNone
+
 func newWindowWebView2(objA interface{}, paramsA interface{}) interface{} {
 	paraArgsT, ok := paramsA.([]string)
 
@@ -268,13 +270,13 @@ func newWindowWebView2(objA interface{}, paramsA interface{}) interface{} {
 		return fmt.Errorf("failed to create window: %v", "N/A")
 	}
 
-	windowStyleT := webview2.HintNone
+	windowStyleG = webview2.HintNone
 
 	if fixT {
-		windowStyleT = webview2.HintFixed
+		windowStyleG = webview2.HintFixed
 	}
 
-	w.SetSize(tk.ToInt(widthT, 800), tk.ToInt(heightT, 600), windowStyleT)
+	w.SetSize(tk.ToInt(widthT, 800), tk.ToInt(heightT, 600), windowStyleG)
 
 	var handlerT tk.TXDelegate
 
@@ -282,6 +284,17 @@ func newWindowWebView2(objA interface{}, paramsA interface{}) interface{} {
 		switch actionA {
 		case "show":
 			w.Run()
+			return nil
+		case "setSize":
+			len1T := len(paramsA)
+			if len1T < 2 {
+				return fmt.Errorf("not enough paramters")
+			}
+			if len1T > 2 {
+				windowStyleG = webview2.Hint(tk.ToInt(paramsA[2]))
+			}
+
+			w.SetSize(tk.ToInt(paramsA[0], 800), tk.ToInt(paramsA[1], 600), windowStyleG)
 			return nil
 		case "navigate":
 			len1T := len(paramsA)
